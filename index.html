@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>Smoothed D3.js Radar Chart</title>
+
+  <!-- Google fonts -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+
+  <!-- D3.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      fill: #242424;
+      text-align: center;
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+      cursor: default;
+    }
+
+    .legend {
+      font-family: 'Raleway', sans-serif;
+      fill: #333333;
+    }
+
+    .tooltip {
+      fill: #333333;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>Oregon Household Income by Race</h1>
+    <div class="container" style='border: 1px solid black; width: 20%; margin-left: 40%'>
+      <h3 style="background-color: yellow">White Resident</h3>
+      <h3 style="background-color: red">African American Resident</h3>
+      <h3 style="background-color: blue">Asian American Resident</h3>
+      <h3 style="background-color: green">Hispanic Resident</h3>
+
+    </div>
+
+  </div>
+
+
+  <div class="radarChart"></div>
+
+  <script src="radarChart.js"></script>
+  <script>
+    /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+
+    //////////////////////////////////////////////////////////////
+    //////////////////////// Set-Up //////////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    var margin = {
+        top: 100,
+        right: 100,
+        bottom: 100,
+        left: 100
+      },
+      width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+      height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+
+    //////////////////////////////////////////////////////////////
+    ////////////////////////// Data //////////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    var data = [
+      [ //Portland
+        {
+          axis: "Less than 10k",
+          value: 0.064
+        },
+        {
+          axis: "10k to 30k",
+          value: 0.205
+        },
+
+        {
+          axis: "30k to 50k",
+          value: 0.191
+        },
+
+        {
+          axis: "50k to 75k",
+          value: 0.185
+        },
+        {
+          axis: "75k to 100k",
+          value: 0.128
+        },
+        {
+          axis: "100k to 125k",
+          value: 0.081
+        },
+        {
+          axis: "125k to 150k",
+          value: 0.053
+        },
+        {
+          axis: "150k to 200k",
+          value: 0.046
+        },
+        {
+          axis: "More than 200k ",
+          value: 0.046
+        }
+
+      ],
+      [ //African American Resident
+        {
+          axis: "Less than 10k",
+          value: 0.17
+        },
+        {
+          axis: "10k to 30k",
+          value: 0.30
+        },
+        {
+          axis: "30k to 50k",
+          value: 0.16
+        },
+        {
+          axis: "50k to 75k",
+          value: 0.14
+        },
+        {
+          axis: "75k to 100k",
+          value: 0.07
+        },
+        {
+          axis: "100k to 125k",
+          value: 0.05
+        },
+        {
+          axis: "125k to 150k",
+          value: 0.02
+        },
+        {
+          axis: "150k to 200k",
+          value: 0.02
+        },
+        {
+          axis: "More than 200k",
+          value: 0.029
+        }
+
+      ],
+      [ //Asian American Resident
+        {
+          axis: "Less than 10k",
+          value: 0.09
+        },
+        {
+          axis: "10k to 30k",
+          value: 0.135
+        },
+        {
+          axis: "30k to 50k",
+          value: 0.137
+        },
+        {
+          axis: "50k to 75k",
+          value: 0.152
+        },
+        {
+          axis: "75k to 100k",
+          value: 0.143
+        },
+        {
+          axis: "100k to 125k",
+          value: 0.108
+        },
+        {
+          axis: "125k to 150k",
+          value: 0.059
+        },
+        {
+          axis: "150k to 200k",
+          value: 0.07
+        },
+        {
+          axis: "More than 200k",
+          value: 0.104
+        }
+
+      ],
+      [ //Hispanic Resident
+        {
+          axis: "Less than 10k",
+          value: 0.06
+        },
+
+        {
+          axis: "10k to 30k",
+          value: 0.168
+        },
+        {
+          axis: "30k to 50k",
+          value: 0.226
+        },
+        {
+          axis: "50k to 75k",
+          value: 0.217
+        },
+        {
+          axis: "75k to 100k",
+          value: 0.11
+        },
+        {
+          axis: "100k to 125k",
+          value: 0.06
+        },
+        {
+          axis: "125k to 150k",
+          value: 0.025
+        },
+        {
+          axis: "150k to 200k",
+          value: 0.02
+        },
+        {
+          axis: "More than 200k",
+          value: 0.013
+        }
+      ]
+    ];
+    //////////////////////////////////////////////////////////////
+    //////////////////// Draw the Chart //////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    var color = d3.scale.ordinal()
+      .range(["#EDC951", "#CC333F", "#00A0B0", "#7cc136"]);
+
+    var radarChartOptions = {
+      w: width,
+      h: height,
+      margin: margin,
+      maxValue: 0.3,
+      levels: 5,
+      roundStrokes: true,
+      color: color
+    };
+    //Call function to draw the Radar chart
+    RadarChart(".radarChart", data, radarChartOptions);
+  </script>
+</body>
+
+</html>
+
+</body>
+
+</html>
