@@ -200,11 +200,11 @@ function RadarChart(id, data, options) {
       //Dim all blobs
       d3.selectAll(".radarArea")
         .transition().duration(200)
-        .style("fill-opacity", 0.1);
+        .style("fill-opacity", 0.3);
       //Bring back the hovered over blob
       d3.select(this)
         .transition().duration(200)
-        .style("fill-opacity", 0.7);
+        .style("fill-opacity", 0.8);
     })
     .on('mouseout', function() {
       //Bring back all blobs
@@ -278,7 +278,7 @@ function RadarChart(id, data, options) {
       tooltip
         .attr('x', newX)
         .attr('y', newY)
-        .text(Format(d.value))
+        .text((d.value * 100) + "% of " + d.group + " earns " + d.axis.toLowerCase())
         .transition().duration(200)
         .style('opacity', 1);
     })
@@ -325,3 +325,4 @@ function RadarChart(id, data, options) {
   } //wrap
 
 } //RadarChart
+adarChart
